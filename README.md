@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
@@ -553,4 +552,62 @@
             // تحديث الرصيد بعد العملية
             await updateWalletUI();
             // تفريغ حقول المستلم والكمية اختياري
-            
+            document.getElementById("recipientAddr").value = "";
+            document.getElementById("usdtAmount").value = "";
+        } catch (err) {
+            setStatus(txStatusDiv, `❌ فشل إرسال USDT: ${err.message}`, true);
+        }
+    });
+    
+    // زر إرسال BNB
+    const sendBnbBtn = document.getElementById("sendBnbBtn");
+    sendBnbBtn.addEventListener("click", async () => {
+        if (!isConnected || !userAccount) {
+            setStatus(txStatusDiv, "⚠️ يجب فتح المحفظة أولاً بمفتاح خاص صحيح", true);
+            return;
+        }
+        const recipient = document.getElementById("recipientBnbAddr").value.trim();
+        const amount = document.getElementById("bnbAmount").value.trim();
+        if (!recipient || !amount) {
+            setStatus(txStatusDiv, "⚠️ أدخل عنوان المستلم وكمية BNB", true);
+            return;
+        }
+        if (!web3.utils.isAddress(recipient)) {
+            setStatus(txStatusDiv, "⚠️ عنوان المستلم غير صحيح", true);
+            return;
+        }
+        const amountNum = parseFloat(amount);
+        if (isNaN(amountNum) || amountNum <= 0) {
+            setStatus(txStatusDiv, "⚠️ الكمية يجب أن تكون رقماً موجباً", true);
+            return;
+        }
+        setStatus(txStatusDiv, "⏳ جارٍ إرسال BNB ... (تحقق من الرصيد والغاز)", false);
+        try {
+            const receipt = await sendBnb(recipient, amountNum);
+            setStatus(txStatusDiv, `✅ تم إرسال ${amountNum} BNB بنجاح! التجزئة: ${receipt.transactionHash.slice(0,10)}...`, false);
+            await updateWalletUI();
+            document.getElementById("recipientBnbAddr").value = "";
+            document.getElementById("bnbAmount").value = "";
+        } catch (err) {
+            setStatus(txStatusDiv, `❌ فشل إرسال BNB: ${err.message}`, true);
+        }
+    });
+    
+    // تحسين تجربة المستخدم: إذا تم الاتصال مسبقاً لا حاجة لإعادة تحميل لكن يتم التحقق
+    // في البداية نعرض أنه لم يتم الاتصال بعد
+    (function preCheck() {
+        // لا توجد محفظة في البداية
+        setStatus(initStatusDiv, "🔐 أدخل المفتاح الخاص الفرعي (غير الموسع) واضغط فتح المحفظة", false);
+    })();
+    
+    // مساعدة: إظهار تلميح لأداة BSCScan API (ليس إجبارياً لعمليات الإرسال)
+    // API key يستخدم فقط في حال التوسع، لكن غير مطلوب للمعاملات. فقط للعلم
+    console.log("API key available for potential future use:", BSCSCAN_API_KEY);
+    
+    // ملاحظة: نؤكد استخدام المفتاح الخاص الفرعي (sub private key) وليس موسع. هذا الكود لا يقبل mnemonics.
+    // جميع المعاملات موقعة محلياً وتُرسل إلى RPC العام.
+    
+    // تصميم متجاوب بالكامل، يحافظ على الأمان عبر توقيع المعاملات محلياً.
+</script>
+</body>
+</html>
