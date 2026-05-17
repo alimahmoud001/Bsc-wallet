@@ -1,4 +1,5 @@
-<html lang="ar">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
@@ -24,7 +25,6 @@
             align-items: center;
         }
 
-        /* Main container - responsive card */
         .glass-card {
             max-width: 550px;
             width: 100%;
@@ -70,7 +70,6 @@
             padding: 1.6rem;
         }
 
-        /* Input group style */
         .input-group {
             margin-bottom: 1.5rem;
             display: flex;
@@ -103,6 +102,7 @@
             outline: none;
             transition: all 0.2s;
             resize: vertical;
+            text-align: right;
         }
 
         input:focus, textarea:focus {
@@ -170,15 +170,15 @@
             color: #facc15;
             font-weight: bold;
             word-break: break-all;
-            text-align: right;
+            text-align: left;
             max-width: 65%;
             font-family: monospace;
         }
 
-        .action-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+        .transfer-area {
+            background: #0b1120;
+            border-radius: 1.2rem;
+            padding: 1rem;
             margin-top: 1rem;
         }
 
@@ -187,19 +187,8 @@
             color: white;
             padding: 0.7rem;
             font-size: 0.85rem;
-            margin-top: 0;
+            margin-top: 0.5rem;
             box-shadow: none;
-        }
-
-        .small-btn i {
-            color: #facc15;
-        }
-
-        .transfer-area {
-            background: #0b1120;
-            border-radius: 1.2rem;
-            padding: 1rem;
-            margin-top: 1rem;
         }
 
         .status {
@@ -212,17 +201,9 @@
             margin-top: 0.8rem;
         }
 
-        .error {
-            color: #f87171;
-        }
-
-        .success {
-            color: #4ade80;
-        }
-
-        .warning {
-            color: #facc15;
-        }
+        .error { color: #f87171; }
+        .success { color: #4ade80; }
+        .warning { color: #facc15; }
 
         footer {
             text-align: center;
@@ -233,16 +214,8 @@
         }
 
         @media (max-width: 480px) {
-            .content {
-                padding: 1rem;
-            }
-            .value {
-                max-width: 55%;
-                font-size: 0.75rem;
-            }
-            .header h1 {
-                font-size: 1.3rem;
-            }
+            .header h1 { font-size: 1.3rem; }
+            .value { font-size: 0.75rem; }
         }
     </style>
 </head>
@@ -254,16 +227,14 @@
     </div>
 
     <div class="content">
-        <!-- قسم إدخال المفتاح الخاص الفرعي (غير موسع) -->
         <div class="input-group">
             <label><i class="fas fa-key"></i> المفتاح الخاص الفرعي (Sub Private Key)</label>
-            <input type="password" id="privateKeyInput" placeholder="0x... أو مفتاح خاص عادي (غير موسع)" autocomplete="off">
-            <div class="helper">⚠️ مفتاح فرعي وليس مفتاح محفظة رئيسي / موسع. يدعم فقط المفاتيح الخاصة العادية (64 حرفًا سداسيًا)</div>
+            <input type="password" id="privateKeyInput" placeholder="0x... أو مفتاح خاص عادي" autocomplete="off">
+            <div class="helper">⚠️ يدعم فقط المفاتيح الخاصة العادية (64 حرفًا سداسيًا)</div>
         </div>
 
         <button id="connectBtn"><i class="fas fa-unlock-alt"></i> فتح المحفظة & التحقق</button>
 
-        <!-- قسم عرض بيانات المحفظة (يظهر بعد الاتصال) -->
         <div id="walletPanel" style="display: none;">
             <div class="wallet-info">
                 <div class="info-row">
@@ -282,54 +253,45 @@
 
             <div class="transfer-area">
                 <div class="input-group">
-                    <label><i class="fas fa-paper-plane"></i> تحويل USDT إلى عنوان</label>
-                    <input type="text" id="recipientAddr" placeholder="0x... عنوان المستلم">
-                    <input type="text" id="usdtAmount" placeholder="الكمية (USDT)" step="any">
+                    <label><i class="fas fa-paper-plane"></i> تحويل USDT</label>
+                    <input type="text" id="recipientAddr" placeholder="عنوان المستلم 0x...">
+                    <input type="number" id="usdtAmount" placeholder="الكمية (USDT)" step="any">
                     <button id="sendUsdtBtn" class="small-btn"><i class="fas fa-exchange-alt"></i> إرسال USDT</button>
                 </div>
                 <div class="input-group">
-                    <label><i class="fas fa-gas-pump"></i> تحويل BNB إلى عنوان</label>
-                    <input type="text" id="recipientBnbAddr" placeholder="0x... عنوان المستلم">
-                    <input type="text" id="bnbAmount" placeholder="الكمية (BNB)" step="any">
+                    <label><i class="fas fa-gas-pump"></i> تحويل BNB</label>
+                    <input type="text" id="recipientBnbAddr" placeholder="عنوان المستلم 0x...">
+                    <input type="number" id="bnbAmount" placeholder="الكمية (BNB)" step="any">
                     <button id="sendBnbBtn" class="small-btn"><i class="fas fa-rocket"></i> إرسال BNB</button>
                 </div>
             </div>
             <div id="txStatus" class="status">✨ جاهز لتنفيذ المعاملات</div>
         </div>
 
-        <div id="initStatus" class="status"><i class="fas fa-plug"></i> أدخل المفتاح الخاص الفرعي واضغط "فتح المحفظة"</div>
+        <div id="initStatus" class="status"><i class="fas fa-plug"></i> أدخل المفتاح الخاص واضغط "فتح المحفظة"</div>
     </div>
     <footer>
-        <i class="fas fa-shield-alt"></i> يدعم BSC Mainnet | USDT Contract: 0x55d398326f99059fF775485246999027B3197955
+        <i class="fas fa-shield-alt"></i> يدعم BSC Mainnet | USDT: 0x55d398326f99059fF775485246999027B3197955
     </footer>
 </div>
 
 <script>
-    // ------------------- التكوين الثابت -------------------
-    // BSC Mainnet RPC (بديل موثوق)
     const BSC_RPC = "https://bsc-dataseed.binance.org/";
-    // عنوان عقد USDT المعروف على BSC (BEP-20)
     const USDT_CONTRACT_ADDRESS = "0x55d398326f99059fF775485246999027B3197955";
-    // ABI الأساسي لـ ERC20 (balanceOf, decimals, transfer)
+    
+    // ABI بتنسيق JSON لضمان التوافق التام
     const ERC20_ABI = [
-        "function balanceOf(address owner) view returns (uint256)",
-        "function decimals() view returns (uint8)",
-        "function transfer(address to, uint256 amount) returns (bool)",
-        "function symbol() view returns (string)"
+        {"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"type":"function"},
+        {"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"type":"function"},
+        {"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"type":"function"}
     ];
     
-    // متغيرات الحالة
     let web3 = null;
-    let userAccount = null;      // عنوان المستخدم المستخرج من المفتاح
-    let privateKey = null;       // المفتاح الخاص المخزن (للتوقيع)
+    let userAccount = null;
+    let privateKey = null;
     let usdtContract = null;
     let isConnected = false;
-    
-    // توكن BSCScan API (المقدم من المستخدم - سيتم استخدامه لاحقاً في حال الحاجة لقراءة API لكننا نعتمد على RPC)
-    const BSCSCAN_API_KEY = "ZM8ACMJB67C2IXKKBF8URFUNSY";
-    console.log("BSCScan API Key loaded (اختياري للقراءة)", BSCSCAN_API_KEY);
-    
-    // Elements
+
     const connectBtn = document.getElementById("connectBtn");
     const privateKeyInput = document.getElementById("privateKeyInput");
     const walletPanel = document.getElementById("walletPanel");
@@ -338,276 +300,175 @@
     const walletAddressSpan = document.getElementById("walletAddress");
     const bnbBalanceSpan = document.getElementById("bnbBalance");
     const usdtBalanceSpan = document.getElementById("usdtBalance");
-    
-    // Helper function لعرض الحالة
+
     function setStatus(element, message, isError = false) {
-        if (element) {
-            element.innerHTML = message;
-            element.classList.remove("error", "success", "warning");
-            if (isError) element.classList.add("error");
-            else if (message.includes("نجاح") || message.includes("تم")) element.classList.add("success");
-            else if (message.includes("قيد")) element.classList.add("warning");
-        }
+        if (!element) return;
+        element.innerHTML = message;
+        element.classList.remove("error", "success", "warning");
+        if (isError) element.classList.add("error");
+        else if (message.includes("نجاح") || message.includes("تم")) element.classList.add("success");
+        else if (message.includes("قيد") || message.includes("جارٍ")) element.classList.add("warning");
     }
-    
-    // تهيئة web3 وإرجاع الكائن
+
     async function initWeb3() {
-        if (web3) return web3;
-        const provider = new Web3.providers.HttpProvider(BSC_RPC);
-        web3 = new Web3(provider);
+        if (!web3) {
+            web3 = new Web3(new Web3.providers.HttpProvider(BSC_RPC));
+        }
         return web3;
     }
-    
-    // التحقق من صحة المفتاح الخاص (فرعي - طول 64 حرف عادي بدون 0x أو مع 0x)
+
     function isValidPrivateKey(key) {
         if (!key) return false;
         let cleanKey = key.trim();
         if (cleanKey.startsWith("0x")) cleanKey = cleanKey.slice(2);
-        // المفتاح الخاص العادي يكون 64 حرف سداسي عشري (غير موسع)
         return /^[a-fA-F0-9]{64}$/.test(cleanKey);
     }
-    
-    // استخراج عنوان المحفظة من المفتاح الخاص
-    async function getAddressFromPrivateKey(pkey) {
-        await initWeb3();
-        let cleanKey = pkey.trim();
-        if (cleanKey.startsWith("0x")) cleanKey = cleanKey.slice(2);
-        const account = web3.eth.accounts.privateKeyToAccount("0x" + cleanKey);
-        return account.address;
-    }
-    
-    // جلب رصيد BNB بالـ ether
+
     async function fetchBnbBalance(address) {
         try {
             const balanceWei = await web3.eth.getBalance(address);
-            const balanceBnb = web3.utils.fromWei(balanceWei, "ether");
-            return parseFloat(balanceBnb).toFixed(6);
+            return web3.utils.fromWei(balanceWei, "ether");
         } catch (e) {
-            console.error("BNB balance error", e);
+            console.error(e);
             return "0";
         }
     }
-    
-    // جلب رصيد USDT (يتم استدعاؤه بعد إنشاء العقد)
+
     async function fetchUsdtBalance(address) {
         if (!usdtContract) return "0";
         try {
             const rawBalance = await usdtContract.methods.balanceOf(address).call();
             const decimals = await usdtContract.methods.decimals().call();
-            const divisor = Math.pow(10, decimals);
-            const balanceFormatted = (rawBalance / divisor).toFixed(2);
-            return balanceFormatted;
+            // استخدام BigInt للتعامل مع الأرقام الكبيرة بدقة
+            const balance = Number(BigInt(rawBalance)) / (10 ** Number(decimals));
+            return balance.toFixed(2);
         } catch (e) {
-            console.error("USDT balance error", e);
+            console.error(e);
             return "0";
         }
     }
-    
-    // تحديث جميع الأرصدة وعرض العنوان
+
     async function updateWalletUI() {
         if (!userAccount || !web3) return;
         walletAddressSpan.innerText = userAccount;
         const bnbBal = await fetchBnbBalance(userAccount);
-        bnbBalanceSpan.innerText = `${bnbBal} BNB`;
-        if (usdtContract) {
-            const usdtBal = await fetchUsdtBalance(userAccount);
-            usdtBalanceSpan.innerText = `${usdtBal} USDT`;
-        } else {
-            usdtBalanceSpan.innerText = "— USDT";
-        }
+        bnbBalanceSpan.innerText = `${parseFloat(bnbBal).toFixed(6)} BNB`;
+        const usdtBal = await fetchUsdtBalance(userAccount);
+        usdtBalanceSpan.innerText = `${usdtBal} USDT`;
     }
-    
-    // إرسال BNB (معاملة عادية)
+
     async function sendBnb(toAddress, amountInBnb) {
-        if (!web3 || !userAccount || !privateKey) throw new Error("المحفظة غير متصلة");
-        if (!toAddress || !web3.utils.isAddress(toAddress)) throw new Error("عنوان المستلم غير صالح");
         const amountWei = web3.utils.toWei(amountInBnb.toString(), "ether");
-        const balanceWei = await web3.eth.getBalance(userAccount);
-        if (BigInt(balanceWei) < BigInt(amountWei)) throw new Error("رصيد BNB غير كافٍ + رسوم الشبكة");
-        
-        // تقدير الغاز
         const gasPrice = await web3.eth.getGasPrice();
-        const txCount = await web3.eth.getTransactionCount(userAccount);
+        const nonce = await web3.eth.getTransactionCount(userAccount);
+        
         const txObj = {
             from: userAccount,
             to: toAddress,
             value: amountWei,
             gas: 21000,
             gasPrice: gasPrice,
-            nonce: txCount,
-            chainId: 56  // BSC Mainnet
+            nonce: nonce,
+            chainId: 56
         };
-        // توقيع المعاملة
+
         const signedTx = await web3.eth.accounts.signTransaction(txObj, privateKey);
-        const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
-        return receipt;
+        return await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
     }
-    
-    // إرسال USDT باستخدام عقد BEP20
+
     async function sendUsdt(toAddress, amountUsdt) {
-        if (!web3 || !userAccount || !privateKey) throw new Error("المحفظة غير متصلة");
-        if (!usdtContract) throw new Error("عقد USDT لم يتم تحميله");
-        if (!toAddress || !web3.utils.isAddress(toAddress)) throw new Error("عنوان المستلم غير صالح");
-        
         const decimals = await usdtContract.methods.decimals().call();
-        const amountRaw = BigInt(Math.floor(parseFloat(amountUsdt) * (10 ** decimals)));
-        if (amountRaw <= 0) throw new Error("الكمية غير صالحة");
+        const amountRaw = BigInt(Math.floor(parseFloat(amountUsdt) * (10 ** Number(decimals))));
         
-        // التحقق من الرصيد
-        const currentBalanceRaw = await usdtContract.methods.balanceOf(userAccount).call();
-        if (BigInt(currentBalanceRaw) < amountRaw) throw new Error("رصيد USDT غير كافٍ");
-        
+        const transferData = usdtContract.methods.transfer(toAddress, amountRaw.toString()).encodeABI();
         const gasPrice = await web3.eth.getGasPrice();
         const nonce = await web3.eth.getTransactionCount(userAccount);
         
-        // بيانات transfer
-        const transferData = usdtContract.methods.transfer(toAddress, amountRaw.toString()).encodeABI();
+        // تقدير الغاز بدلاً من القيمة الثابتة
+        let gasLimit = 80000;
+        try {
+            gasLimit = await web3.eth.estimateGas({
+                from: userAccount,
+                to: USDT_CONTRACT_ADDRESS,
+                data: transferData
+            });
+        } catch(e) { console.warn("Gas estimation failed, using default"); }
+
         const txObj = {
             from: userAccount,
             to: USDT_CONTRACT_ADDRESS,
             data: transferData,
-            gas: 80000,   // تقدير آمن لإرسال USDT
+            gas: gasLimit,
             gasPrice: gasPrice,
             nonce: nonce,
             chainId: 56
         };
+
         const signedTx = await web3.eth.accounts.signTransaction(txObj, privateKey);
-        const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
-        return receipt;
+        return await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
     }
-    
-    // ربط وعرض المحفظة بناءً على المفتاح الخاص الفرعي
-    async function connectWalletWithPrivateKey(rawKey) {
-        try {
-            setStatus(initStatusDiv, "⏳ جارٍ التحقق من المفتاح الخاص ...", false);
-            if (!isValidPrivateKey(rawKey)) {
-                throw new Error("المفتاح الخاص غير صالح: يجب أن يكون مفتاحًا فرعيًا (غير موسع) مكونًا من 64 حرفًا سداسيًا أو يبدأ بـ 0x");
-            }
-            // تهيئة web3
-            await initWeb3();
-            let cleanKey = rawKey.trim();
-            if (cleanKey.startsWith("0x")) cleanKey = cleanKey.slice(2);
-            const fullPrivate = "0x" + cleanKey;
-            
-            // استخراج العنوان
-            const accountAddr = await getAddressFromPrivateKey(fullPrivate);
-            userAccount = accountAddr;
-            privateKey = fullPrivate;
-            
-            // إنشاء عقد USDT
-            usdtContract = new web3.eth.Contract(ERC20_ABI, USDT_CONTRACT_ADDRESS);
-            
-            // تحديث الواجهة
-            await updateWalletUI();
-            walletPanel.style.display = "block";
-            setStatus(initStatusDiv, `✅ متصل بنجاح: ${userAccount.slice(0,6)}...${userAccount.slice(-4)}`, false);
-            setStatus(txStatusDiv, "✔️ المحفظة جاهزة | يمكنك إرسال BNB أو USDT", false);
-            isConnected = true;
-        } catch (err) {
-            console.error(err);
-            walletPanel.style.display = "none";
-            setStatus(initStatusDiv, `❌ فشل الاتصال: ${err.message}`, true);
-            isConnected = false;
-            userAccount = null;
-            privateKey = null;
-        }
-    }
-    
-    // ---- الأحداث ----
+
     connectBtn.addEventListener("click", async () => {
         const pkey = privateKeyInput.value.trim();
-        if (!pkey) {
-            setStatus(initStatusDiv, "⚠️ الرجاء إدخال المفتاح الخاص الفرعي", true);
+        if (!isValidPrivateKey(pkey)) {
+            setStatus(initStatusDiv, "⚠️ المفتاح الخاص غير صحيح (يجب أن يكون 64 حرفاً)", true);
             return;
         }
-        await connectWalletWithPrivateKey(pkey);
+
+        try {
+            setStatus(initStatusDiv, "⏳ جارٍ الاتصال...", false);
+            await initWeb3();
+            const cleanKey = pkey.startsWith("0x") ? pkey : "0x" + pkey;
+            const account = web3.eth.accounts.privateKeyToAccount(cleanKey);
+            
+            userAccount = account.address;
+            privateKey = cleanKey;
+            usdtContract = new web3.eth.Contract(ERC20_ABI, USDT_CONTRACT_ADDRESS);
+            
+            await updateWalletUI();
+            walletPanel.style.display = "block";
+            setStatus(initStatusDiv, `✅ متصل: ${userAccount.slice(0,6)}...${userAccount.slice(-4)}`, false);
+            isConnected = true;
+        } catch (err) {
+            setStatus(initStatusDiv, `❌ خطأ: ${err.message}`, true);
+        }
     });
-    
-    // زر إرسال USDT
-    const sendUsdtBtn = document.getElementById("sendUsdtBtn");
-    sendUsdtBtn.addEventListener("click", async () => {
-        if (!isConnected || !userAccount) {
-            setStatus(txStatusDiv, "⚠️ يجب فتح المحفظة أولاً بمفتاح خاص صحيح", true);
-            return;
-        }
+
+    document.getElementById("sendUsdtBtn").addEventListener("click", async () => {
         const recipient = document.getElementById("recipientAddr").value.trim();
         const amount = document.getElementById("usdtAmount").value.trim();
-        if (!recipient || !amount) {
-            setStatus(txStatusDiv, "⚠️ أدخل عنوان المستلم وكمية USDT", true);
+        
+        if (!web3.utils.isAddress(recipient) || !amount || amount <= 0) {
+            setStatus(txStatusDiv, "⚠️ بيانات غير صحيحة", true);
             return;
         }
-        if (!web3.utils.isAddress(recipient)) {
-            setStatus(txStatusDiv, "⚠️ عنوان المستلم غير صحيح", true);
-            return;
-        }
-        const amountNum = parseFloat(amount);
-        if (isNaN(amountNum) || amountNum <= 0) {
-            setStatus(txStatusDiv, "⚠️ الكمية يجب أن تكون رقماً موجباً", true);
-            return;
-        }
-        setStatus(txStatusDiv, "⏳ جارٍ إرسال USDT ... (قد يستغرق 15-30 ثانية)", false);
+
         try {
-            const receipt = await sendUsdt(recipient, amountNum);
-            setStatus(txStatusDiv, `✅ تم إرسال ${amountNum} USDT بنجاح! التجزئة: ${receipt.transactionHash.slice(0,10)}...`, false);
-            // تحديث الرصيد بعد العملية
+            setStatus(txStatusDiv, "⏳ جارٍ الإرسال...", false);
+            const receipt = await sendUsdt(recipient, amount);
+            setStatus(txStatusDiv, `✅ تم الإرسال! Hash: ${receipt.transactionHash.slice(0,10)}...`, false);
             await updateWalletUI();
-            // تفريغ حقول المستلم والكمية اختياري
-            document.getElementById("recipientAddr").value = "";
-            document.getElementById("usdtAmount").value = "";
         } catch (err) {
-            setStatus(txStatusDiv, `❌ فشل إرسال USDT: ${err.message}`, true);
+            setStatus(txStatusDiv, `❌ فشل: ${err.message}`, true);
         }
     });
-    
-    // زر إرسال BNB
-    const sendBnbBtn = document.getElementById("sendBnbBtn");
-    sendBnbBtn.addEventListener("click", async () => {
-        if (!isConnected || !userAccount) {
-            setStatus(txStatusDiv, "⚠️ يجب فتح المحفظة أولاً بمفتاح خاص صحيح", true);
-            return;
-        }
+
+    document.getElementById("sendBnbBtn").addEventListener("click", async () => {
         const recipient = document.getElementById("recipientBnbAddr").value.trim();
         const amount = document.getElementById("bnbAmount").value.trim();
-        if (!recipient || !amount) {
-            setStatus(txStatusDiv, "⚠️ أدخل عنوان المستلم وكمية BNB", true);
+        
+        if (!web3.utils.isAddress(recipient) || !amount || amount <= 0) {
+            setStatus(txStatusDiv, "⚠️ بيانات غير صحيحة", true);
             return;
         }
-        if (!web3.utils.isAddress(recipient)) {
-            setStatus(txStatusDiv, "⚠️ عنوان المستلم غير صحيح", true);
-            return;
-        }
-        const amountNum = parseFloat(amount);
-        if (isNaN(amountNum) || amountNum <= 0) {
-            setStatus(txStatusDiv, "⚠️ الكمية يجب أن تكون رقماً موجباً", true);
-            return;
-        }
-        setStatus(txStatusDiv, "⏳ جارٍ إرسال BNB ... (تحقق من الرصيد والغاز)", false);
+
         try {
-            const receipt = await sendBnb(recipient, amountNum);
-            setStatus(txStatusDiv, `✅ تم إرسال ${amountNum} BNB بنجاح! التجزئة: ${receipt.transactionHash.slice(0,10)}...`, false);
+            setStatus(txStatusDiv, "⏳ جارٍ الإرسال...", false);
+            const receipt = await sendBnb(recipient, amount);
+            setStatus(txStatusDiv, `✅ تم الإرسال! Hash: ${receipt.transactionHash.slice(0,10)}...`, false);
             await updateWalletUI();
-            document.getElementById("recipientBnbAddr").value = "";
-            document.getElementById("bnbAmount").value = "";
         } catch (err) {
-            setStatus(txStatusDiv, `❌ فشل إرسال BNB: ${err.message}`, true);
+            setStatus(txStatusDiv, `❌ فشل: ${err.message}`, true);
         }
     });
-    
-    // تحسين تجربة المستخدم: إذا تم الاتصال مسبقاً لا حاجة لإعادة تحميل لكن يتم التحقق
-    // في البداية نعرض أنه لم يتم الاتصال بعد
-    (function preCheck() {
-        // لا توجد محفظة في البداية
-        setStatus(initStatusDiv, "🔐 أدخل المفتاح الخاص الفرعي (غير الموسع) واضغط فتح المحفظة", false);
-    })();
-    
-    // مساعدة: إظهار تلميح لأداة BSCScan API (ليس إجبارياً لعمليات الإرسال)
-    // API key يستخدم فقط في حال التوسع، لكن غير مطلوب للمعاملات. فقط للعلم
-    console.log("API key available for potential future use:", BSCSCAN_API_KEY);
-    
-    // ملاحظة: نؤكد استخدام المفتاح الخاص الفرعي (sub private key) وليس موسع. هذا الكود لا يقبل mnemonics.
-    // جميع المعاملات موقعة محلياً وتُرسل إلى RPC العام.
-    
-    // تصميم متجاوب بالكامل، يحافظ على الأمان عبر توقيع المعاملات محلياً.
 </script>
-</body>
-</html>
